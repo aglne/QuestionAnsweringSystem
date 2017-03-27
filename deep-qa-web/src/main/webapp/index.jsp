@@ -52,7 +52,7 @@
     </head>
     <body>
         <h1><font color="blue">人机问答系统演示 <a href="https://github.com/ysc/QuestionAnsweringSystem" target="_blank">项目主页</a></font></h1>
-        <h2><a href="view.jsp">更多细节</a></h2>
+        <h2><a href="view.jsp?q=<%=questionStr%>">更多细节</a></h2>
                 <%
                     if (questionStr == null || questionStr.trim().length() <= 3) {
                 %>      
@@ -95,14 +95,6 @@
             3、<a href="index.jsp?q=谁死后布了七十二疑冢？">谁死后布了七十二疑冢？</a><br/>
             4、<a href="index.jsp?q=谁是资深Nutch搜索引擎专家？">谁是资深Nutch搜索引擎专家？</a><br/>
             5、<a href="index.jsp?q=BMW是哪个汽车公司制造的？">BMW是哪个汽车公司制造的？</a><br/>
-            6、<a href="index.jsp?q=长城信用卡是哪家银行发行的？">长城信用卡是哪家银行发行的？</a><br/>
-            7、<a href="index.jsp?q=美国历史上第一所学校是哪一所？">美国历史上第一所学校是哪一所？</a><br/>
-            8、<a href="index.jsp?q=前身是红色中华通讯社的机构是哪个？">前身是红色中华通讯社的机构是哪个？</a><br/>
-            9、<a href="index.jsp?q=“海的女儿”是哪个城市的城徽？">“海的女儿”是哪个城市的城徽？</a><br/>
-            10、<a href="index.jsp?q=世界上流经国家最多的河流是哪一条？">世界上流经国家最多的河流是哪一条？</a><br/>
-            11、<a href="index.jsp?q=世界上最长的河流是什么？">世界上最长的河流是哪条？</a><br/>
-            12、<a href="index.jsp?q=汉城是哪个国家的首都？">汉城是哪个国家的首都？</a><br/>
-            13、<a href="index.jsp?q=世界上最小的海有多少万平方公里？">世界上最小的海有多少万平方公里？</a>
         </p>
         <font color="red">输入问题：</font><input id="q" name="q" size="50" maxlength="50">
         <p></p>

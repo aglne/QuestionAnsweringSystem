@@ -1,37 +1,34 @@
 ##QuestionAnsweringSystem是一个Java实现的人机问答系统，能够自动分析问题并给出候选答案。IBM人工智能计算机系统"沃森"（Watson）在2011年2月美国热门的电视智力问答节目"危险边缘"（Jeopardy！）中战胜了两位人类冠军选手，QuestionAnsweringSystem就是IBM Watson的Java开源实现。
 
-##使用方法：
+[QuestionAnsweringSystem技术实现简要分析](http://blog.sina.com.cn/s/blog_9be6dec10102vq55.html)
 
-    1、安装JDK8和Maven2.2.1
+[捐赠致谢](https://github.com/ysc/QuestionAnsweringSystem/wiki/donation)
+
+## 使用方法
+
+    1、安装JDK8和Maven3.3.3
         将JDK的bin目录和Maven的bin目录加入PATH环境变量，确保在命令行能调用java和mvn命令：
         java -version
-            java version "1.8.0_45"
+            java version "1.8.0_60"
         mvn -v
-            Apache Maven 2.2.1
-
-    2、准备word分词器
-        word分词器1.3还未release，先自己编译最新的源码
-        git clone https://github.com/ysc/word.git
-        cd word
-        mvn clean install
-        cd ..
+            Apache Maven 3.3.3
             
-    3、获取问答系统源码
+    2、获取人机问答系统源码
         git clone https://github.com/ysc/QuestionAnsweringSystem.git
         cd QuestionAnsweringSystem
         建议自己注册一个GitHub账号，将项目Fork到自己的账号下，然后再从自己的账号下签出项目源码，
         这样便于使用GitHub的Pull requests功能进行协作开发。
     
-    4、运行项目
+    3、运行项目
         unix类操作系统执行：
             chmod +x startup.sh & ./startup.sh
         windows类操作系统执行：
             ./startup.bat
 
-    5、使用系统
+    4、使用系统
         打开浏览器访问：http://localhost:8080/deep-qa-web/index.jsp
 
-##工作原理：
+## 工作原理
 
     1、判断问题类型（答案类型），当前使用模式匹配的方法，将来支持更多的方法，如朴素贝叶斯分类器。
     2、提取问题关键词。
@@ -40,7 +37,7 @@
     5、结合问题以及搜索结果对候选答案进行打分。
     6、返回得分最高的TopN项候选答案。
 	
-##目前支持5种问题类型（答案类型）：
+## 目前支持5种问题类型（答案类型）
 
     1、人名 
 		如：
@@ -72,11 +69,22 @@
 		大庆油田是哪一年发现的？
 		澳门是在哪一年回归祖国怀抱的？
 		邓小平在什么时候进行南巡讲话？
+
+## 增加新的问题类型（答案类型）
+
+    1、在枚举类 org.apdplat.qa.model.QuestionType 中
+       增加新的问题类型，并在词性和问题类型之间做映射。
+       
+    2、在资源目录 src/main/resources/questionTypePatterns 中增加新的模式匹配规则来支持新的问题类型的判定
+       目录中的 3 个文件代表不同抽象层级的模式，只需要在其中一个文件中增加新的模式即可。
+       
+    3、在类 org.apdplat.qa.questiontypeanalysis.QuestionTypeTransformer 中
+       将模式匹配规则映射为枚举类 org.apdplat.qa.model.QuestionType 的实例。
 		
-##API接口：
+## API接口
 
 	调用地址：
-		http://127.0.0.1/api/ask?n=1&q=APDPlat的作者是谁？
+		http://127.0.0.1/deep-qa-web/api/ask?n=1&q=APDPlat的作者是谁？
 	参数：
 		n表示需要返回的答案的个数
 		q表示问题
@@ -91,11 +99,11 @@
 			}
 		]
 			
-##使用说明：
+## 使用说明
 
 1、初始化MySQL数据库(MySQL作为数据缓存区使用，此步骤可选)：   
 
-    在MySQL命令行中执行QuestionAnsweringSystem\deep-qa\src\main\resources\mysql\questionanswer.sql文件中的脚本   
+    在MySQL命令行中执行QuestionAnsweringSystem/deep-qa/src/main/resources/mysql/questionanswer.sql文件中的脚本   
     MySQL编码：UTF-8，
     主机：127.0.0.1
     端口：3306
@@ -106,18 +114,17 @@
 2、构建war文件并部署到tomcat：
 
     cd QuestionAnsweringSystem   
-    mvn install   
-    cd deep-qa-web\target
-    cp deep-qa-web-1.1.war apache-tomcat-7.0.37/webapps/QuestionAnsweringSystem.war   
+    mvn install
+    cp deep-qa-web/target/deep-qa-web-1.2.war apache-tomcat-8.0.27/webapps/   
     启动tomcat
 	
 3、打开浏览器访问：
 
-    http://localhost:8080/QuestionAnsweringSystem/
+    http://localhost:8080/deep-qa-web-1.2/index.jsp
 	
 [可部署war包下载](http://pan.baidu.com/s/1hq9pekc)
 
-##如何在你的应用中集成人机问答系统QuestionAnsweringSystem? 
+## 在你的应用中集成人机问答系统QuestionAnsweringSystem
 
     QuestionAnsweringSystem提供了两种集成方式，以库的方式嵌入到应用中，以平台的方式独立部署。
 
@@ -130,7 +137,7 @@
     <dependency>
         <groupId>org.apdplat</groupId>
         <artifactId>deep-qa</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </dependency>
 
     在应用如何使用呢？示例代码如下：
@@ -153,7 +160,7 @@
     首先在自己的服务器上如192.168.0.1部署好了，然后就可以通过Json Over HTTP的方式提供服务，使用方法如下所示：
 
     调用地址：
-    http://192.168.0.1/api/ask?n=1&q=APDPlat的作者是谁？
+    http://192.168.0.1/deep-qa-web/api/ask?n=1&q=APDPlat的作者是谁？
     参数：
     n表示需要返回的答案的个数
     q表示问题
@@ -167,7 +174,7 @@
         }
     ]
 
-##深入了解：
+## 深入了解
 
     QuestionAnsweringSystem由2个子项目构成，deep-qa和deep-qa-web。
     deep-qa是核心部分，deep-qa-web提供web界面来和用户交互，同时也提供了Json Over HTTP的访问接口，便于异构系统的集成。
@@ -176,7 +183,7 @@
     <dependency>
         <groupId>org.apdplat</groupId>
         <artifactId>deep-qa</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </dependency>
 
     示例代码如下：
@@ -194,6 +201,22 @@
     运行程序后会在当前目录下生成目录deep-qa，目录里面又有两个目录dic和questionTypePatterns。
     dic是中文分词组件依赖的词库，questionTypePatterns是问题类别分析依赖的模式定义，可根据自己的需要修改。
 
+## Watson介绍
+
+    Watson is a computer system like no other ever built. 
+    It analyzes natural language questions and content well enough and fast enough 
+    to compete and win against champion players at Jeopardy!
+
+[IBM Watson: How it Works](https://www.youtube.com/watch?v=_Xcmh1LQB9I)
+
+[Building Watson - A Brief Overview of the DeepQA Project](https://www.youtube.com/watch?v=3G2H3DZ8rNc)
+    
+[This is Watson：A detailed explanation of how Watson works](http://ieeexplore.ieee.org/xpl/tocresult.jsp?isnumber=6177717)
+
+[The DeepQA Research Team](http://researcher.watson.ibm.com/researcher/view_group.php?id=2099)
+
+## 相关文章
+
 [测试人机问答系统智能性的3760个问题](http://my.oschina.net/apdplat/blog/401622)
 
 [人机问答系统的前世今生](http://my.oschina.net/apdplat/blog/420370)
@@ -202,7 +225,7 @@
 
 [What is Question Answering?](https://class.coursera.org/nlp/lecture/155)
 
-其他人机问答系统介绍：
+## 其他人机问答系统介绍
 
 1、OpenEphyra（Java开源）
 
@@ -306,4 +329,5 @@
     It's designed to be General, Feasible and Useful. 
 
 [Magi Semantic Search主页](http://www.peak-labs.com/)
-    
+   
+[https://travis-ci.org/ysc/QuestionAnsweringSystem](https://travis-ci.org/ysc/QuestionAnsweringSystem) 
